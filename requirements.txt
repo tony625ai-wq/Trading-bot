@@ -1,0 +1,8 @@
+groq
+python-telegram-bot
+feedparser
+schedule
+python-dotenv
+pandas
+yfinance
+requests

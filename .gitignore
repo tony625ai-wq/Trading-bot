@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+trades.json
+nohup.out
+*.log
+.DS_Store
