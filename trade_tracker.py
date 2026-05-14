@@ -51,6 +51,12 @@ def close_trade(trade_id: int, exit_price: float):
             t["closed_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     _save(trades)
 
+def _yf_code(ticker: str) -> str:
+    t = ticker.upper().replace("HK.", "")
+    if t.isdigit() and len(t) == 5 and t.startswith("0"):
+        t = t[1:]
+    return f"{t}.HK" if t.isdigit() else t
+
 def daily_pnl_report() -> dict:
     """取得所有持倉的當前損益"""
     import yfinance as yf
@@ -62,7 +68,11 @@ def daily_pnl_report() -> dict:
     total_pnl = 0
     for t in open_trades:
         try:
-            price = yf.Ticker(t["ticker"]).history(period="1d")["Close"].iloc[-1]
+            hist = yf.Ticker(_yf_code(t["ticker"])).history(period="1d")["Close"]
+            if hist.empty:
+                print(f"[tracker] {t['ticker']} 收市中，略過取價")
+                continue
+            price = hist.iloc[-1]
             pnl_pct = ((price - t["entry_price"]) / t["entry_price"]) * 100
             if t["action"] == "SELL":
                 pnl_pct = -pnl_pct
