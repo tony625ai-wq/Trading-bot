@@ -10,7 +10,7 @@ from ai_analyst import analyse_news
 from futu_trader import get_current_portfolio
 from telegram_control import (
     send_daily_report, send_stop_loss_alert, send_weekly_report,
-    send_nightly_summary, send_preopen_ranking, send_daily_review,
+    send_nightly_summary, send_preopen_ranking, send_daily_review, send_autofix_notification,
     today_decisions, auto_trade_enabled, run_telegram_bot
 )
 
@@ -93,6 +93,20 @@ def _check_nightly_summary():
         print(f"[nightly] 發送失敗: {e}")
 
 _daily_review_sent_date = None
+_autofix_notified_date = None
+
+def _check_autofix_notification():
+    global _autofix_notified_date
+    try:
+        import pytz
+        uk = pytz.timezone("Europe/London")
+        now = datetime.now(uk)
+        today = now.date()
+        if now.hour == 23 and now.minute >= 15 and now.minute < 20 and _autofix_notified_date != today:
+            _autofix_notified_date = today
+            asyncio.run(send_autofix_notification())
+    except Exception as e:
+        print(f"[autofix-notify] 排程失敗: {e}")
 
 def _check_daily_review():
     global _daily_review_sent_date
@@ -259,6 +273,7 @@ def scheduler_thread():
     # 每晚 10 PM UK 時間總結
     schedule.every(1).minutes.do(_check_nightly_summary)
     schedule.every(1).minutes.do(_check_daily_review)
+    schedule.every(1).minutes.do(_check_autofix_notification)
     # 止損監控每 15 分鐘一次（降低 CPU 佔用）
     schedule.every(15).minutes.do(lambda: asyncio.run(monitor_stop_loss()))
     # 週日 HK 20:00 = UTC 12:00 週報

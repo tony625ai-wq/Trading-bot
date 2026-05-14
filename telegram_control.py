@@ -964,6 +964,38 @@ async def send_nightly_summary():
     await bot.send_message(chat_id=YOUR_CHAT_ID, text=text, parse_mode="HTML")
 
 
+async def send_autofix_notification():
+    """檢查今天 Auto-Fix Bot 有沒有 commit，有的話發 Telegram 通知"""
+    import subprocess
+    from datetime import datetime
+    import pytz
+    bot = Bot(token=BOT_TOKEN)
+    uk = pytz.timezone("Europe/London")
+    today = datetime.now(uk).strftime("%Y-%m-%d")
+    repo_dir = os.path.dirname(__file__)
+    try:
+        subprocess.run(["git", "pull", "--ff-only"], cwd=repo_dir,
+                       capture_output=True, timeout=30)
+        result = subprocess.run(
+            ["git", "log", "--oneline", "--author=Auto-Fix Bot",
+             f"--after={today} 00:00", f"--before={today} 23:59"],
+            cwd=repo_dir, capture_output=True, text=True, timeout=10
+        )
+        commits = result.stdout.strip()
+        if not commits:
+            return
+        diff = subprocess.run(
+            ["git", "show", "--stat", commits.split()[0]],
+            cwd=repo_dir, capture_output=True, text=True, timeout=10
+        ).stdout.strip()
+        msg = (f"🔧 <b>Auto-Fix Bot 今晚修了代碼</b>\n\n"
+               f"<code>{commits}</code>\n\n"
+               f"<pre>{diff[:1500]}</pre>")
+        await bot.send_message(chat_id=YOUR_CHAT_ID, text=msg, parse_mode="HTML")
+    except Exception as e:
+        print(f"[autofix-notify] 失敗: {e}")
+
+
 async def send_daily_review():
     """讀取遠端 agent 每晚 commit 的 Daily/YYYY-MM-DD.md 並發送到 Telegram"""
     import subprocess
