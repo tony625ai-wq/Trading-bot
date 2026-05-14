@@ -6,11 +6,13 @@ import threading
 from datetime import datetime, timezone
 
 from news_fetcher import fetch_daily_news
+import crypto_paper_trader
 from ai_analyst import analyse_news
 from futu_trader import get_current_portfolio
 from telegram_control import (
     send_daily_report, send_stop_loss_alert, send_weekly_report,
     send_nightly_summary, send_preopen_ranking, send_daily_review, send_autofix_notification,
+    send_crypto_update,
     today_decisions, auto_trade_enabled, run_telegram_bot
 )
 
@@ -264,10 +266,20 @@ def _send_us_preopen_ranking():
     except Exception as e:
         print(f"[us-preopen] 排名失敗: {e}")
 
+def _run_crypto_cycle():
+    try:
+        msgs = crypto_paper_trader.run_cycle()
+        if msgs:
+            asyncio.run(send_crypto_update(msgs))
+    except Exception as e:
+        print(f"[crypto] 週期失敗: {e}")
+
 # ── 排程器 ──────────────────────────────────────────────────
 def scheduler_thread():
     # HK 08:30 = UTC 00:30 — 開市前 30 分鐘跑分析
     schedule.every().day.at("00:30").do(lambda: asyncio.run(run_daily_analysis()))
+    # Crypto 紙交易，每 15 分鐘一次
+    schedule.every(15).minutes.do(_run_crypto_cycle)
     # FutuOpenD 健康監測，每 15 分鐘一次
     schedule.every(15).minutes.do(_futu_health_check)
     # 每晚 10 PM UK 時間總結

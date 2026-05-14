@@ -964,6 +964,12 @@ async def send_nightly_summary():
     await bot.send_message(chat_id=YOUR_CHAT_ID, text=text, parse_mode="HTML")
 
 
+async def send_crypto_update(msgs: list):
+    bot = Bot(token=BOT_TOKEN)
+    text = "🔐 <b>Crypto 紙交易更新</b>\n\n" + "\n".join(msgs)
+    await bot.send_message(chat_id=YOUR_CHAT_ID, text=text[:4000], parse_mode="HTML")
+
+
 async def send_autofix_notification():
     """檢查今天 Auto-Fix Bot 有沒有 commit，有的話發 Telegram 通知"""
     import subprocess
