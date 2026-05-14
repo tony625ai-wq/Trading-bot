@@ -964,6 +964,36 @@ async def send_nightly_summary():
     await bot.send_message(chat_id=YOUR_CHAT_ID, text=text, parse_mode="HTML")
 
 
+async def send_daily_review():
+    """讀取遠端 agent 每晚 commit 的 Daily/YYYY-MM-DD.md 並發送到 Telegram"""
+    import subprocess
+    from datetime import datetime
+    import pytz
+    bot = Bot(token=BOT_TOKEN)
+    uk = pytz.timezone("Europe/London")
+    today = datetime.now(uk).strftime("%Y-%m-%d")
+    report_path = os.path.join(os.path.dirname(__file__), f"Daily/{today}.md")
+    try:
+        subprocess.run(["git", "pull", "--ff-only"], cwd=os.path.dirname(__file__),
+                       capture_output=True, timeout=30)
+    except Exception:
+        pass
+    if not os.path.exists(report_path):
+        await bot.send_message(chat_id=YOUR_CHAT_ID,
+                               text=f"📋 <b>每日報告</b>\n{today} 的報告尚未生成。",
+                               parse_mode="HTML")
+        return
+    with open(report_path, encoding="utf-8") as f:
+        content = f.read()
+    header = f"📋 <b>每日 Bot 績效報告 — {today}</b>\n\n"
+    full = header + content
+    chunk_size = 3800
+    for i in range(0, len(full), chunk_size):
+        await bot.send_message(chat_id=YOUR_CHAT_ID,
+                               text=full[i:i+chunk_size],
+                               parse_mode="HTML")
+
+
 async def send_weekly_report(report: dict):
     bot = Bot(token=BOT_TOKEN)
     trades = report.get("trades", [])
