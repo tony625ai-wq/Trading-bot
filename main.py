@@ -96,6 +96,31 @@ def _check_nightly_summary():
 
 _daily_review_sent_date = None
 _autofix_notified_date = None
+_crypto_data_pushed_date = None
+
+def _push_crypto_data():
+    """每晚 9:45pm push 最新 crypto 數據到 GitHub，讓 10pm 遠端 agent 能讀到"""
+    global _crypto_data_pushed_date
+    try:
+        import pytz, subprocess
+        uk = pytz.timezone("Europe/London")
+        now = datetime.now(uk)
+        today = now.date()
+        if now.hour == 21 and now.minute >= 45 and now.minute < 50 and _crypto_data_pushed_date != today:
+            _crypto_data_pushed_date = today
+            repo = os.path.dirname(os.path.abspath(__file__))
+            subprocess.run(["git", "config", "user.email", "bot@trading-bot"], cwd=repo, capture_output=True)
+            subprocess.run(["git", "config", "user.name", "Trading Bot"], cwd=repo, capture_output=True)
+            subprocess.run(["git", "add", "crypto_paper_trades.json", "crypto_pattern_learning.json"], cwd=repo, capture_output=True)
+            result = subprocess.run(["git", "commit", "-m", f"data: crypto paper trades {today}"], cwd=repo, capture_output=True, text=True)
+            if "nothing to commit" not in result.stdout + result.stderr:
+                subprocess.run(["git", "push"], cwd=repo, capture_output=True)
+                print(f"[crypto-push] 數據已 push 到 GitHub ({today})")
+            else:
+                print(f"[crypto-push] 無新數據，略過")
+    except Exception as e:
+        print(f"[crypto-push] 失敗: {e}")
+
 
 def _check_autofix_notification():
     global _autofix_notified_date
@@ -286,6 +311,7 @@ def scheduler_thread():
     schedule.every(1).minutes.do(_check_nightly_summary)
     schedule.every(1).minutes.do(_check_daily_review)
     schedule.every(1).minutes.do(_check_autofix_notification)
+    schedule.every(1).minutes.do(_push_crypto_data)
     # 止損監控每 15 分鐘一次（降低 CPU 佔用）
     schedule.every(15).minutes.do(lambda: asyncio.run(monitor_stop_loss()))
     # 週日 HK 20:00 = UTC 12:00 週報
