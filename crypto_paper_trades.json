@@ -1,0 +1,286 @@
+{
+  "capital": 9998.195833715175,
+  "open": [
+    {
+      "id": 10,
+      "symbol": "BTCUSDT",
+      "direction": "short",
+      "entry": 80944.26,
+      "stop_loss": 81288.193929,
+      "target": 80371.036786,
+      "qty": 0.006172,
+      "size_usdt": 499.58,
+      "confidence": 55,
+      "patterns": [
+        "three_black_crows"
+      ],
+      "opened_at": "2026-05-15 02:10 UTC"
+    },
+    {
+      "id": 13,
+      "symbol": "BNBUSDT",
+      "direction": "long",
+      "entry": 683.03,
+      "stop_loss": 679.553214,
+      "target": 688.824643,
+      "qty": 0.7319,
+      "size_usdt": 499.91,
+      "confidence": 50,
+      "patterns": [
+        "three_white_soldiers",
+        "bullish_engulfing"
+      ],
+      "opened_at": "2026-05-15 06:42 UTC"
+    },
+    {
+      "id": 14,
+      "symbol": "XRPUSDT",
+      "direction": "long",
+      "entry": 1.4689,
+      "stop_loss": 1.459354,
+      "target": 1.484811,
+      "qty": 340.329356,
+      "size_usdt": 499.91,
+      "confidence": 45,
+      "patterns": [
+        "inside_bar",
+        "doji",
+        "bullish_pin_bar",
+        "inside_bar"
+      ],
+      "opened_at": "2026-05-15 07:17 UTC"
+    }
+  ],
+  "closed": [
+    {
+      "id": 1,
+      "symbol": "BTCUSDT",
+      "direction": "long",
+      "entry": 81501.17,
+      "stop_loss": 81207.824643,
+      "target": 81990.078929,
+      "qty": 0.006135,
+      "size_usdt": 500.0,
+      "confidence": 50,
+      "patterns": [
+        "morning_star",
+        "inside_bar"
+      ],
+      "opened_at": "2026-05-14 21:39 UTC",
+      "exit": 81188.35,
+      "pnl_pct": -0.384,
+      "pnl_usdt": -1.92,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-14 23:09 UTC"
+    },
+    {
+      "id": 3,
+      "symbol": "BNBUSDT",
+      "direction": "long",
+      "entry": 680.91,
+      "stop_loss": 678.429643,
+      "target": 685.043929,
+      "qty": 0.734311,
+      "size_usdt": 500.0,
+      "confidence": 50,
+      "patterns": [
+        "bullish_pin_bar"
+      ],
+      "opened_at": "2026-05-14 21:39 UTC",
+      "exit": 678.02,
+      "pnl_pct": -0.424,
+      "pnl_usdt": -2.12,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-14 23:09 UTC"
+    },
+    {
+      "id": 2,
+      "symbol": "ETHUSDT",
+      "direction": "long",
+      "entry": 2299.63,
+      "stop_loss": 2290.258214,
+      "target": 2315.249643,
+      "qty": 0.217426,
+      "size_usdt": 500.0,
+      "confidence": 70,
+      "patterns": [
+        "bullish_engulfing",
+        "bullish_pin_bar",
+        "inside_bar"
+      ],
+      "opened_at": "2026-05-14 21:39 UTC",
+      "exit": 2283.33,
+      "pnl_pct": -0.709,
+      "pnl_usdt": -3.54,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-14 23:54 UTC"
+    },
+    {
+      "id": 5,
+      "symbol": "BNBUSDT",
+      "direction": "short",
+      "entry": 678.09,
+      "stop_loss": 680.13,
+      "target": 674.69,
+      "qty": 0.737067,
+      "size_usdt": 499.8,
+      "confidence": 65,
+      "patterns": [
+        "three_black_crows",
+        "evening_star"
+      ],
+      "opened_at": "2026-05-14 23:09 UTC",
+      "exit": 680.32,
+      "pnl_pct": -0.329,
+      "pnl_usdt": -1.64,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-15 00:09 UTC"
+    },
+    {
+      "id": 6,
+      "symbol": "BTCUSDT",
+      "direction": "short",
+      "entry": 81068.8,
+      "stop_loss": 81298.7275,
+      "target": 80685.5875,
+      "qty": 0.006163,
+      "size_usdt": 499.62,
+      "confidence": 55,
+      "patterns": [
+        "bearish_engulfing"
+      ],
+      "opened_at": "2026-05-14 23:54 UTC",
+      "exit": 81301.15,
+      "pnl_pct": -0.287,
+      "pnl_usdt": -1.43,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-15 00:09 UTC"
+    },
+    {
+      "id": 7,
+      "symbol": "BTCUSDT",
+      "direction": "long",
+      "entry": 81520.01,
+      "stop_loss": 81259.25,
+      "target": 81954.61,
+      "qty": 0.006127,
+      "size_usdt": 499.47,
+      "confidence": 45,
+      "patterns": [
+        "bullish_engulfing"
+      ],
+      "opened_at": "2026-05-15 00:40 UTC",
+      "exit": 81227.44,
+      "pnl_pct": -0.359,
+      "pnl_usdt": -1.79,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-15 01:55 UTC"
+    },
+    {
+      "id": 8,
+      "symbol": "BNBUSDT",
+      "direction": "short",
+      "entry": 684.12,
+      "stop_loss": 686.712857,
+      "target": 679.798571,
+      "qty": 0.730087,
+      "size_usdt": 499.47,
+      "confidence": 45,
+      "patterns": [
+        "bearish_pin_bar"
+      ],
+      "opened_at": "2026-05-15 00:40 UTC",
+      "exit": 678.62,
+      "pnl_pct": 0.804,
+      "pnl_usdt": 4.02,
+      "reason": "TARGET ✅",
+      "closed_at": "2026-05-15 02:10 UTC"
+    },
+    {
+      "id": 4,
+      "symbol": "SOLUSDT",
+      "direction": "short",
+      "entry": 92.34,
+      "stop_loss": 92.738571,
+      "target": 91.675714,
+      "qty": 5.412583,
+      "size_usdt": 499.8,
+      "confidence": 45,
+      "patterns": [
+        "three_black_crows"
+      ],
+      "opened_at": "2026-05-14 23:09 UTC",
+      "exit": 91.45,
+      "pnl_pct": 0.964,
+      "pnl_usdt": 4.82,
+      "reason": "TARGET ✅",
+      "closed_at": "2026-05-15 04:56 UTC"
+    },
+    {
+      "id": 9,
+      "symbol": "ETHUSDT",
+      "direction": "short",
+      "entry": 2278.25,
+      "stop_loss": 2289.935,
+      "target": 2258.775,
+      "qty": 0.219193,
+      "size_usdt": 499.38,
+      "confidence": 55,
+      "patterns": [
+        "bearish_engulfing"
+      ],
+      "opened_at": "2026-05-15 01:55 UTC",
+      "exit": 2243.06,
+      "pnl_pct": 1.545,
+      "pnl_usdt": 7.71,
+      "reason": "TARGET ✅",
+      "closed_at": "2026-05-15 05:41 UTC"
+    },
+    {
+      "id": 11,
+      "symbol": "BNBUSDT",
+      "direction": "short",
+      "entry": 678.75,
+      "stop_loss": 682.075714,
+      "target": 673.207143,
+      "qty": 0.736382,
+      "size_usdt": 499.82,
+      "confidence": 45,
+      "patterns": [
+        "bearish_engulfing"
+      ],
+      "opened_at": "2026-05-15 04:56 UTC",
+      "exit": 683.03,
+      "pnl_pct": -0.631,
+      "pnl_usdt": -3.15,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-15 06:42 UTC"
+    },
+    {
+      "id": 12,
+      "symbol": "ETHUSDT",
+      "direction": "short",
+      "entry": 2243.06,
+      "stop_loss": 2254.994643,
+      "target": 2223.168929,
+      "qty": 0.223001,
+      "size_usdt": 500.2,
+      "confidence": 55,
+      "patterns": [
+        "three_black_crows"
+      ],
+      "opened_at": "2026-05-15 05:41 UTC",
+      "exit": 2255.37,
+      "pnl_pct": -0.549,
+      "pnl_usdt": -2.75,
+      "reason": "STOP ❌",
+      "closed_at": "2026-05-15 06:42 UTC"
+    }
+  ],
+  "stats": {
+    "total_trades": 11,
+    "wins": 3,
+    "losses": 8,
+    "total_pnl_pct": -0.359
+  }
+}

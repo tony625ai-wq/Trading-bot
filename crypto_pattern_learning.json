@@ -1,0 +1,66 @@
+{
+  "morning_star_long": {
+    "pattern": "morning_star",
+    "direction": "long",
+    "trades": 1,
+    "wins": 0,
+    "win_rate": 0.0,
+    "last_seen": "2026-05-14"
+  },
+  "inside_bar_long": {
+    "pattern": "inside_bar",
+    "direction": "long",
+    "trades": 2,
+    "wins": 0,
+    "win_rate": 0.0,
+    "last_seen": "2026-05-14"
+  },
+  "bullish_pin_bar_long": {
+    "pattern": "bullish_pin_bar",
+    "direction": "long",
+    "trades": 2,
+    "wins": 0,
+    "win_rate": 0.0,
+    "last_seen": "2026-05-14"
+  },
+  "bullish_engulfing_long": {
+    "pattern": "bullish_engulfing",
+    "direction": "long",
+    "trades": 2,
+    "wins": 0,
+    "win_rate": 0.0,
+    "last_seen": "2026-05-15"
+  },
+  "three_black_crows_short": {
+    "pattern": "three_black_crows",
+    "direction": "short",
+    "trades": 3,
+    "wins": 1,
+    "win_rate": 33.3,
+    "last_seen": "2026-05-15"
+  },
+  "evening_star_short": {
+    "pattern": "evening_star",
+    "direction": "short",
+    "trades": 1,
+    "wins": 0,
+    "win_rate": 0.0,
+    "last_seen": "2026-05-15"
+  },
+  "bearish_engulfing_short": {
+    "pattern": "bearish_engulfing",
+    "direction": "short",
+    "trades": 3,
+    "wins": 1,
+    "win_rate": 33.3,
+    "last_seen": "2026-05-15"
+  },
+  "bearish_pin_bar_short": {
+    "pattern": "bearish_pin_bar",
+    "direction": "short",
+    "trades": 1,
+    "wins": 1,
+    "win_rate": 100.0,
+    "last_seen": "2026-05-15"
+  }
+}
