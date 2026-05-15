@@ -49,6 +49,8 @@ US_TICKERS = {
     "US.GOOGL": "GOOGL",
     "US.META":  "META",
     "US.MSFT":  "MSFT",
+    "US.AMD":   "AMD",
+    "US.COIN":  "COIN",
 }
 ALL_TICKERS = {**HK_TICKERS, **US_TICKERS}
 
