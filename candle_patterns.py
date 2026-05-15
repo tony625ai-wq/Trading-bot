@@ -7,10 +7,10 @@ def detect(df: pd.DataFrame) -> list[dict]:
     c0, c1, c2 = df.iloc[-1], df.iloc[-2], df.iloc[-3]
     patterns = []
 
-    def body(c):     return abs(c["close"] - c["open"])
-    def rng(c):      return c["high"] - c["low"] if c["high"] != c["low"] else 1e-9
-    def bullish(c):  return c["close"] > c["open"]
-    def bearish(c):  return c["close"] < c["open"]
+    def body(c):       return abs(c["close"] - c["open"])
+    def rng(c):        return c["high"] - c["low"] if c["high"] != c["low"] else 1e-9
+    def bullish(c):    return c["close"] > c["open"]
+    def bearish(c):    return c["close"] < c["open"]
     def upper_wick(c): return c["high"] - max(c["close"], c["open"])
     def lower_wick(c): return min(c["close"], c["open"]) - c["low"]
 
@@ -27,17 +27,20 @@ def detect(df: pd.DataFrame) -> list[dict]:
                           "desc": "錘頭，潛在底部反轉"})
 
     # ── Shooting Star (bearish reversal at top) ──────────────────────────
+    # Requires strong upper wick AND the prior candle must be notably bullish
     if (upper_wick(c0) > 2 * body(c0)
             and lower_wick(c0) < body(c0) * 0.3
-            and bullish(c1)):
+            and bullish(c1)
+            and body(c1) > rng(c1) * 0.4):    # prior candle must have real body
         patterns.append({"name": "shooting_star", "direction": "bearish",
                           "desc": "流星，潛在頂部反轉"})
 
     # ── Bullish Engulfing ────────────────────────────────────────────────
+    # Stricter: engulfing body must be meaningfully larger (1.5×)
     if (bearish(c1) and bullish(c0)
             and c0["open"] <= c1["close"]
             and c0["close"] >= c1["open"]
-            and body(c0) > body(c1)):
+            and body(c0) > body(c1) * 1.5):
         patterns.append({"name": "bullish_engulfing", "direction": "bullish",
                           "desc": "看漲吞噬，強力反轉信號"})
 
@@ -45,23 +48,12 @@ def detect(df: pd.DataFrame) -> list[dict]:
     if (bullish(c1) and bearish(c0)
             and c0["open"] >= c1["close"]
             and c0["close"] <= c1["open"]
-            and body(c0) > body(c1)):
+            and body(c0) > body(c1) * 1.5):
         patterns.append({"name": "bearish_engulfing", "direction": "bearish",
                           "desc": "看跌吞噬，強力反轉信號"})
 
-    # ── Morning Star ─────────────────────────────────────────────────────
-    if (bearish(c2) and body(c1) / rng(c1) < 0.3
-            and bullish(c0)
-            and c0["close"] > (c2["open"] + c2["close"]) / 2):
-        patterns.append({"name": "morning_star", "direction": "bullish",
-                          "desc": "晨星，三根底部反轉"})
-
-    # ── Evening Star ─────────────────────────────────────────────────────
-    if (bullish(c2) and body(c1) / rng(c1) < 0.3
-            and bearish(c0)
-            and c0["close"] < (c2["open"] + c2["close"]) / 2):
-        patterns.append({"name": "evening_star", "direction": "bearish",
-                          "desc": "暮星，三根頂部反轉"})
+    # ── Morning Star — DISABLED (30-31% win rate, net loser) ─────────────
+    # ── Evening Star — DISABLED (30-31% win rate, net loser) ─────────────
 
     # ── Three White Soldiers ─────────────────────────────────────────────
     if (bullish(c2) and bullish(c1) and bullish(c0)
@@ -99,18 +91,18 @@ def detect(df: pd.DataFrame) -> list[dict]:
     return patterns
 
 
-# Patterns that are weak on their own — require at least one other confirming pattern
+# Patterns that cannot trigger a trade on their own
 WEAK_ALONE = {"three_white_soldiers", "three_black_crows", "doji", "inside_bar"}
 
 def _filter_patterns(patterns: list[dict]) -> list[dict]:
-    """Remove low-confidence patterns when they appear alone with no confirmation."""
+    """Keep patterns only when there is meaningful directional confirmation."""
     strong = [p for p in patterns if p["name"] not in WEAK_ALONE]
     if strong:
-        return patterns          # strong pattern present — keep all
+        return patterns
     weak = [p for p in patterns if p["name"] in WEAK_ALONE]
     if len(weak) >= 2:
-        return weak              # two weak patterns together = marginal confirmation
-    return []                    # single weak pattern alone — filter out
+        return weak
+    return []
 
 
 def score_signal(patterns: list[dict], rsi: float, ema9: float, ema21: float,
@@ -118,12 +110,17 @@ def score_signal(patterns: list[dict], rsi: float, ema9: float, ema21: float,
     """
     Returns (direction, confidence 0-100).
     direction: 'long' | 'short' | 'hold'
+
+    Hard requirements (all must pass before scoring):
+      - EMA9/EMA21 trend alignment
+      - At least 2 directional confirming patterns
+      - MACD on the right side of signal line
+      - RVOL > 1.3 (real volume participation)
     """
     patterns = _filter_patterns(patterns)
     if not patterns:
         return "hold", 0
 
-    # ── Trend filter: EMA9 vs EMA21 ──────────────────────────────
     trend_up   = ema9 > ema21
     trend_down = ema9 < ema21
 
@@ -134,22 +131,27 @@ def score_signal(patterns: list[dict], rsi: float, ema9: float, ema21: float,
     direction = "hold"
 
     if bull > bear:
-        if not trend_up:          # trend filter: reject long against downtrend
-            return "hold", 0
+        if not trend_up:               return "hold", 0   # trend filter
+        if bull < 2:                   return "hold", 0   # need 2+ bullish patterns
         direction = "long"
         score += bull * 20
-        if rsi < 50:              score += 15
-        if macd > macd_signal:    score += 10
-        if rvol > 1.2:            score += 10
-        score += 15               # already confirmed trend_up (EMA9 > EMA21)
+        score += 15                    # trend confirmed
+        if rsi < 50:                   score += 15
+        if rsi < 40:                   score += 10        # oversold bounce bonus
+        if macd > macd_signal:         score += 15        # MACD aligned bonus
+        if rvol > 1.3:                 score += 10        # volume participation bonus
+        if rvol > 1.8:                 score += 5         # strong volume bonus
+
     elif bear > bull:
-        if not trend_down:        # trend filter: reject short against uptrend
-            return "hold", 0
+        if not trend_down:             return "hold", 0
+        if bear < 2:                   return "hold", 0   # need 2+ bearish patterns
         direction = "short"
         score += bear * 20
-        if rsi > 50:              score += 15
-        if macd < macd_signal:    score += 10
-        if rvol > 1.2:            score += 10
-        score += 15               # already confirmed trend_down (EMA9 < EMA21)
+        score += 15
+        if rsi > 50:                   score += 15
+        if rsi > 60:                   score += 10        # overbought reversal bonus
+        if macd < macd_signal:         score += 15        # MACD aligned bonus
+        if rvol > 1.3:                 score += 10
+        if rvol > 1.8:                 score += 5
 
     return direction, min(score, 100)

@@ -23,7 +23,7 @@ from technical_analysis import update_pattern_stats
 # ── Config ────────────────────────────────────────────────────────────────────
 PERIOD           = "1y"
 INTERVAL         = "1h"
-MIN_CONFIDENCE   = 45
+MIN_CONFIDENCE   = 60
 ATR_STOP_MULT    = 1.5
 ATR_TARGET_MULT  = 3.0
 RISK_PER_TRADE   = 0.02          # 2% of capital per trade

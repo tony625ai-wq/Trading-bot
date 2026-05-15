@@ -17,7 +17,7 @@ MAX_POSITIONS    = 3
 RISK_PER_TRADE   = 0.05        # 5% of portfolio per trade
 ATR_STOP_MULT    = 1.5         # stop = entry ± 1.5× ATR
 ATR_TARGET_MULT  = 3.0         # target = entry ± 3.0× ATR (R:R 2:1)
-MIN_CONFIDENCE   = 45          # minimum signal confidence to trade
+MIN_CONFIDENCE   = 60          # minimum signal confidence to trade
 
 
 # ── State helpers ─────────────────────────────────────────────────────────────
