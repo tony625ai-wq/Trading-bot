@@ -293,24 +293,24 @@ def on_signal(sig: dict):
     if time.time() - _start_time < STARTUP_WARMUP_SECS:
         return
 
-    # TA conviction gate — candle pattern signals need ≥5 (pattern is primary conviction);
-    # all other signal types need ≥7 (structural signals require stronger composite confirmation)
+    # TA conviction gate — candle signals need ≥3 (pattern is primary conviction);
+    # all other signal types need ≥5
     ta_score_val   = sig.get("ta_score", 0)
     is_candle_sig  = sig_type in ("CANDLE_PATTERN_SIGNAL", "CANDLE_PATTERN_SHORT")
-    ta_min         = 5 if is_candle_sig else 7
+    ta_min         = 3 if is_candle_sig else 5
     if abs(ta_score_val) < ta_min:
         print(f"[day_trader] TA 評分 {ta_score_val}/10 不足（需 ≥{ta_min}），跳過 {code}")
         return
 
-    # ATR regime filter — skip if market is too quiet / choppy
-    # US stocks trade in USD at high prices so 1-min ATR is naturally smaller; use 0.2% threshold
-    # HK stocks: 0.4% threshold
+    # ATR regime filter — skip only if truly dead (no movement at all)
+    # HK blue chips have naturally low ATR — use 0.15% threshold
+    # US stocks: 0.1% threshold (prices are high, ATR in % terms is naturally small)
     try:
         from market_watcher import get_ta_results
         _atr_regime   = get_ta_results().get(code, {}).get("indicators", {}).get("atr")
-        _atr_min_pct  = 0.002 if code.startswith("US.") else 0.004
+        _atr_min_pct  = 0.001 if code.startswith("US.") else 0.0015
         if _atr_regime and price > 0 and _atr_regime < price * _atr_min_pct:
-            print(f"[day_trader] {code} ATR={_atr_regime:.3f} 低於 {_atr_min_pct*100:.1f}% 市場橫行，跳過")
+            print(f"[day_trader] {code} ATR={_atr_regime:.3f} 低於 {_atr_min_pct*100:.2f}% 市場死水，跳過")
             return
     except:
         pass
