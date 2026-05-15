@@ -99,12 +99,34 @@ def detect(df: pd.DataFrame) -> list[dict]:
     return patterns
 
 
+# Patterns that are weak on their own — require at least one other confirming pattern
+WEAK_ALONE = {"three_white_soldiers", "three_black_crows", "doji", "inside_bar"}
+
+def _filter_patterns(patterns: list[dict]) -> list[dict]:
+    """Remove low-confidence patterns when they appear alone with no confirmation."""
+    strong = [p for p in patterns if p["name"] not in WEAK_ALONE]
+    if strong:
+        return patterns          # strong pattern present — keep all
+    weak = [p for p in patterns if p["name"] in WEAK_ALONE]
+    if len(weak) >= 2:
+        return weak              # two weak patterns together = marginal confirmation
+    return []                    # single weak pattern alone — filter out
+
+
 def score_signal(patterns: list[dict], rsi: float, ema9: float, ema21: float,
                  macd: float, macd_signal: float, rvol: float) -> tuple[str, int]:
     """
     Returns (direction, confidence 0-100).
     direction: 'long' | 'short' | 'hold'
     """
+    patterns = _filter_patterns(patterns)
+    if not patterns:
+        return "hold", 0
+
+    # ── Trend filter: EMA9 vs EMA21 ──────────────────────────────
+    trend_up   = ema9 > ema21
+    trend_down = ema9 < ema21
+
     bull = sum(1 for p in patterns if p["direction"] == "bullish")
     bear = sum(1 for p in patterns if p["direction"] == "bearish")
 
@@ -112,18 +134,22 @@ def score_signal(patterns: list[dict], rsi: float, ema9: float, ema21: float,
     direction = "hold"
 
     if bull > bear:
+        if not trend_up:          # trend filter: reject long against downtrend
+            return "hold", 0
         direction = "long"
         score += bull * 20
-        if rsi < 50:   score += 15
-        if ema9 > ema21: score += 15
-        if macd > macd_signal: score += 10
-        if rvol > 1.2: score += 10
+        if rsi < 50:              score += 15
+        if macd > macd_signal:    score += 10
+        if rvol > 1.2:            score += 10
+        score += 15               # already confirmed trend_up (EMA9 > EMA21)
     elif bear > bull:
+        if not trend_down:        # trend filter: reject short against uptrend
+            return "hold", 0
         direction = "short"
         score += bear * 20
-        if rsi > 50:   score += 15
-        if ema9 < ema21: score += 15
-        if macd < macd_signal: score += 10
-        if rvol > 1.2: score += 10
+        if rsi > 50:              score += 15
+        if macd < macd_signal:    score += 10
+        if rvol > 1.2:            score += 10
+        score += 15               # already confirmed trend_down (EMA9 < EMA21)
 
     return direction, min(score, 100)

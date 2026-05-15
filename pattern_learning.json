@@ -1,94 +1,94 @@
 {
   "signals": {
     "CANDLE_SHORT": {
-      "trades": 720,
-      "wins": 263,
-      "total_pnl": -728.0
+      "trades": 1855,
+      "wins": 625,
+      "total_pnl": -2081.94
     },
     "CANDLE_LONG": {
-      "trades": 775,
-      "wins": 294,
-      "total_pnl": -123.23
+      "trades": 2121,
+      "wins": 758,
+      "total_pnl": -345.25
     }
   },
   "candle_patterns": {
     "doji": {
-      "trades": 231,
-      "wins": 85,
-      "total_pnl": -62.95
+      "trades": 709,
+      "wins": 258,
+      "total_pnl": -163.6
     },
     "bearish_pin_bar": {
-      "trades": 230,
-      "wins": 91,
-      "total_pnl": -59.78
+      "trades": 657,
+      "wins": 236,
+      "total_pnl": -190.78
     },
     "bearish_engulfing": {
-      "trades": 200,
-      "wins": 67,
-      "total_pnl": -87.02
+      "trades": 634,
+      "wins": 206,
+      "total_pnl": -1175.71
     },
     "bullish_pin_bar": {
-      "trades": 233,
-      "wins": 87,
-      "total_pnl": -73.21
+      "trades": 772,
+      "wins": 270,
+      "total_pnl": -232.28
     },
     "three_white_soldiers": {
-      "trades": 224,
-      "wins": 87,
-      "total_pnl": -31.56
+      "trades": 276,
+      "wins": 105,
+      "total_pnl": -40.55
     },
     "morning_star": {
-      "trades": 160,
-      "wins": 52,
-      "total_pnl": -66.91
+      "trades": 496,
+      "wins": 142,
+      "total_pnl": -239.47
     },
     "inside_bar": {
-      "trades": 211,
-      "wins": 80,
-      "total_pnl": -20.12
+      "trades": 703,
+      "wins": 238,
+      "total_pnl": -144.63
     },
     "evening_star": {
-      "trades": 150,
-      "wins": 54,
-      "total_pnl": -67.49
+      "trades": 440,
+      "wins": 136,
+      "total_pnl": -263.31
     },
     "bullish_engulfing": {
-      "trades": 189,
-      "wins": 76,
-      "total_pnl": 25.92
+      "trades": 675,
+      "wins": 266,
+      "total_pnl": 71.89
     },
     "hammer": {
-      "trades": 31,
-      "wins": 17,
-      "total_pnl": 26.31
+      "trades": 97,
+      "wins": 47,
+      "total_pnl": 78.58
     },
     "three_black_crows": {
-      "trades": 182,
-      "wins": 66,
-      "total_pnl": -530.86
+      "trades": 223,
+      "wins": 82,
+      "total_pnl": -509.18
     },
     "shooting_star": {
-      "trades": 35,
-      "wins": 11,
-      "total_pnl": -26.97
+      "trades": 75,
+      "wins": 20,
+      "total_pnl": -57.67
     }
   },
   "chart_patterns": {},
   "ta_score_bands": {
     "4": {
-      "trades": 1360,
-      "wins": 508,
-      "total_pnl": -805.87
+      "trades": 3536,
+      "wins": 1226,
+      "total_pnl": -2329.1
     },
     "6": {
-      "trades": 133,
-      "wins": 48,
-      "total_pnl": -46.37
+      "trades": 425,
+      "wins": 150,
+      "total_pnl": -102.26
     },
     "8": {
-      "trades": 2,
-      "wins": 1,
-      "total_pnl": 1.13
+      "trades": 15,
+      "wins": 7,
+      "total_pnl": 4.1
     }
   }
 }
