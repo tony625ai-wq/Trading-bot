@@ -70,29 +70,26 @@ def get_current_price(symbol: str) -> float:
 
 
 def _add_indicators(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-    c = df["close"]
-    df["ema9"]  = c.ewm(span=9).mean()
-    df["ema21"] = c.ewm(span=21).mean()
-    df["ema50"] = c.ewm(span=50).mean()
-
-    delta = c.diff()
-    gain  = delta.clip(lower=0).rolling(14).mean()
-    loss  = (-delta.clip(upper=0)).rolling(14).mean()
-    df["rsi"] = 100 - (100 / (1 + gain / loss))
-
+    c       = df["close"]
+    ema9    = c.ewm(span=9).mean()
+    ema21   = c.ewm(span=21).mean()
+    ema50   = c.ewm(span=50).mean()
+    delta   = c.diff()
+    gain    = delta.clip(lower=0).rolling(14).mean()
+    loss    = (-delta.clip(upper=0)).rolling(14).mean()
+    rsi     = 100 - (100 / (1 + gain / loss))
     vol_ma20 = df["volume"].rolling(20).mean()
-    df["vol_ma20"] = vol_ma20
-    df["rvol"]     = df["volume"] / vol_ma20.replace(0, 1)
-
-    ema12 = c.ewm(span=12).mean()
-    ema26 = c.ewm(span=26).mean()
-    macd  = ema12 - ema26
-    df["macd"]        = macd
-    df["macd_signal"] = macd.ewm(span=9).mean()
-
-    df["atr"] = _atr(df)
-    return df
+    rvol    = df["volume"] / vol_ma20.replace(0, 1)
+    ema12   = c.ewm(span=12).mean()
+    ema26   = c.ewm(span=26).mean()
+    macd    = ema12 - ema26
+    macd_signal = macd.ewm(span=9).mean()
+    atr     = _atr(df)
+    return df.assign(
+        ema9=ema9, ema21=ema21, ema50=ema50,
+        rsi=rsi, vol_ma20=vol_ma20, rvol=rvol,
+        macd=macd, macd_signal=macd_signal, atr=atr,
+    )
 
 
 def _atr(df: pd.DataFrame, period: int = 14) -> pd.Series:
