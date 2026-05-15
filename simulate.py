@@ -32,25 +32,28 @@ COMMISSION       = 60            # HKD round-trip
 SLIPPAGE         = 0.001         # 0.1% each side
 
 HK_TICKERS = {
-    "HK.00700": "0700.HK",
-    "HK.09988": "9988.HK",
-    "HK.03690": "3690.HK",
-    "HK.09618": "9618.HK",
-    "HK.00941": "0941.HK",
-    "HK.02318": "2318.HK",
-    "HK.00005": "0005.HK",
-    "HK.01211": "1211.HK",
+    "HK.01024": "1024.HK",   # Kuaishou      -0.56%
+    "HK.00175": "0175.HK",   # Geely Auto    -0.59%
+    "HK.00669": "0669.HK",   # Techtronic    -0.83%
+    "HK.06862": "6862.HK",   # Haidilao      -0.99%
+    "HK.02318": "2318.HK",   # Ping An       -1.10%
+    "HK.01810": "1810.HK",   # Xiaomi        -1.25%
+    "HK.00941": "0941.HK",   # China Mobile  -1.28%
+    "HK.00700": "0700.HK",   # Tencent       -1.31%
+    "HK.00005": "0005.HK",   # HSBC          -1.33%
+    "HK.09988": "9988.HK",   # Alibaba       -1.41%
 }
 US_TICKERS = {
-    "US.NVDA":  "NVDA",
-    "US.AAPL":  "AAPL",
-    "US.TSLA":  "TSLA",
-    "US.AMZN":  "AMZN",
-    "US.GOOGL": "GOOGL",
-    "US.META":  "META",
-    "US.MSFT":  "MSFT",
-    "US.AMD":   "AMD",
-    "US.COIN":  "COIN",
+    "US.PANW":  "PANW",   # Palo Alto     -0.11%
+    "US.AMD":   "AMD",    # AMD           -0.13%
+    "US.COIN":  "COIN",   # Coinbase      -0.20%
+    "US.PYPL":  "PYPL",   # PayPal        -0.66%
+    "US.CRWD":  "CRWD",   # CrowdStrike   -0.71%
+    "US.AAPL":  "AAPL",   # Apple         -0.73%
+    "US.GOOGL": "GOOGL",  # Google        -0.84%
+    "US.NVDA":  "NVDA",   # Nvidia        -0.90%
+    "US.DDOG":  "DDOG",   # Datadog       -0.93%
+    "US.CRM":   "CRM",    # Salesforce    -1.12%
 }
 ALL_TICKERS = {**HK_TICKERS, **US_TICKERS}
 
